@@ -1,10 +1,10 @@
-package one.digitalinnovation.gof
+package spring.leandrolid.bank
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class GofApplicationTests {
+class BankApplicationTests {
 
 	@Test
 	fun contextLoads() {
