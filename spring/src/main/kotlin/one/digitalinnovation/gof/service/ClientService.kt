@@ -1,24 +1,18 @@
-package one.digitalinnovation.gof.service;
+package one.digitalinnovation.gof.service
 
-import one.digitalinnovation.gof.model.Client;
+import one.digitalinnovation.gof.model.Client
 
 /**
- * Interface que define o padrão <b>Strategy</b> no domínio de cliente. Com
+ * Interface que define o padrão **Strategy** no domínio de cliente. Com
  * isso, se necessário, podemos ter multiplas implementações dessa mesma
  * interface.
- * 
+ *
  * @author falvojr
  */
-public interface ClientService {
-
-	Iterable<Client> getAll();
-
-	Client getById(Long id);
-
-	void insert(Client client);
-
-	void update(Long id, Client client);
-
-	void delete(Long id);
-
+interface ClientService {
+    fun getAll(): Iterable<Client>
+    fun getById(id: Long): Client
+    fun insert(client: Client)
+    fun update(id: Long, client: Client)
+    fun delete(id: Long)
 }

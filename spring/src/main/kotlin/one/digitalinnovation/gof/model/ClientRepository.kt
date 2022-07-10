@@ -1,9 +1,7 @@
-package one.digitalinnovation.gof.model;
+package one.digitalinnovation.gof.model
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
 
 @Repository
-public interface ClientRepository extends CrudRepository<Client, Long> {
-
-}
+interface ClientRepository : CrudRepository<Client, Long>

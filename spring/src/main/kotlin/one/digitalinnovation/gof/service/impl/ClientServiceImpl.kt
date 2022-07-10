@@ -1,77 +1,71 @@
-package one.digitalinnovation.gof.service.impl;
+package one.digitalinnovation.gof.service.impl
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import one.digitalinnovation.gof.model.Client;
-import one.digitalinnovation.gof.model.ClientRepository;
-import one.digitalinnovation.gof.model.Address;
-import one.digitalinnovation.gof.model.AddressRepository;
-import one.digitalinnovation.gof.service.ClientService;
-import one.digitalinnovation.gof.service.ViaCepService;
+import one.digitalinnovation.gof.service.ClientService
+import org.springframework.beans.factory.annotation.Autowired
+import one.digitalinnovation.gof.model.ClientRepository
+import one.digitalinnovation.gof.model.AddressRepository
+import one.digitalinnovation.gof.model.Client
+import one.digitalinnovation.gof.service.ViaCepService
+import org.springframework.stereotype.Service
 
 /**
- * Implementação da <b>Strategy</b> {@link ClientService}, a qual pode ser
- * injetada pelo Spring (via {@link Autowired}). Com isso, como essa classe é um
- * {@link Service}, ela será tratada como um <b>Singleton</b>.
- * 
+ * Implementação da **Strategy** [ClientService], a qual pode ser
+ * injetada pelo Spring (via [Autowired]). Com isso, como essa classe é um
+ * [Service], ela será tratada como um **Singleton**.
+ *
  * @author falvojr
  */
 @Service
-public class ClientServiceImpl implements ClientService {
+class ClientServiceImpl : ClientService {
+    // Singleton: Injetar os componentes do Spring com @Autowired.
+    @Autowired
+    private val clientRepository: ClientRepository? = null
 
-	// Singleton: Injetar os componentes do Spring com @Autowired.
-	@Autowired
-	private ClientRepository clientRepository;
-	@Autowired
-	private AddressRepository addressRepository;
-	@Autowired
-	private ViaCepService viaCepService;
-	
-	// Strategy: Implementar os métodos definidos na interface.
-	// Facade: Abstrair integrações com subsistemas, provendo uma interface simples.
+    @Autowired
+    private val addressRepository: AddressRepository? = null
 
-	@Override
-	public Iterable<Client> getAll() {
-		return clientRepository.findAll();
-	}
+    @Autowired
+    private val viaCepService: ViaCepService? = null
 
-	@Override
-	public Client getById(Long id) {
-		Optional<Client> client = clientRepository.findById(id);
-		return client.get();
-	}
+    // Strategy: Implementar os métodos definidos na interface.
+    // Facade: Abstrair integrações com subsistemas, provendo uma interface simples.
+    override fun getAll(): Iterable<Client> {
+        return clientRepository!!.findAll()
+    }
 
-	@Override
-	public void insert(Client client) {
-		saveClientWithZipCode(client);
-	}
+    override fun getById(id: Long): Client {
+        val client = clientRepository!!.findById(id)
+        return client.get()
+    }
 
-	@Override
-	public void update(Long id, Client client) {
-		Optional<Client> clientDb = clientRepository.findById(id);
-		if (clientDb.isPresent()) {
-			saveClientWithZipCode(client);
-		}
-	}
+    override fun insert(client: Client) {
+        saveClientWithZipCode(client)
+    }
 
-	@Override
-	public void delete(Long id) {
-		clientRepository.deleteById(id);
-	}
+    override fun update(id: Long, client: Client) {
+        val clientDb = clientRepository!!.findById(id)
+        if (clientDb.isPresent) {
+            saveClientWithZipCode(client)
+        }
+    }
 
-	private void saveClientWithZipCode(Client client) {
-		String cep = client.getAddress().getCep();
-		Address address = addressRepository.findById(cep).orElseGet(() -> {
-			// Caso não exista, integrar com o ViaCEP e persistir o retorno.
-			Address newAddress = viaCepService.getAddressByZipCode(cep);
-			addressRepository.save(newAddress);
-			return newAddress;
-		});
-		client.setAddress(address);
-		clientRepository.save(client);
-	}
+    override fun delete(id: Long) {
+        clientRepository!!.deleteById(id)
+    }
 
+    private fun saveClientWithZipCode(client: Client) {
+        val cep = client.address.cep
+        val address = addressRepository!!.findById(cep).orElseGet {
+            // Caso não exista, integrar com o ViaCEP e persistir o retorno.
+            val newAddress = viaCepService!!.getAddressByZipCode(cep)
+
+            newAddress.let {
+                addressRepository.save(it)
+            }
+
+            newAddress
+        }
+        client.address = address
+        clientRepository!!.save(client)
+    }
 }

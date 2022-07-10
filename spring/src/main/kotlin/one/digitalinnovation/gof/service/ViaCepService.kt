@@ -1,23 +1,23 @@
-package one.digitalinnovation.gof.service;
+package one.digitalinnovation.gof.service
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import one.digitalinnovation.gof.model.Address;
+import one.digitalinnovation.gof.model.Address
+import org.springframework.cloud.openfeign.FeignClient
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 
 /**
- * Client HTTP, criado via <b>OpenFeign</b>, para o consumo da API do
- * <b>ViaCEP</b>.
- * 
- * @see <a href="https://spring.io/projects/spring-cloud-openfeign">Spring Cloud OpenFeign</a>
- * @see <a href="https://viacep.com.br">ViaCEP</a>
- * 
+ * Client HTTP, criado via **OpenFeign**, para o consumo da API do
+ * **ViaCEP**.
+ *
+ * @see [Spring Cloud OpenFeign](https://spring.io/projects/spring-cloud-openfeign)
+ *
+ * @see [ViaCEP](https://viacep.com.br)
+ *
+ *
  * @author falvojr
  */
 @FeignClient(name = "viacep", url = "https://viacep.com.br/ws")
-public interface ViaCepService {
-
-	@GetMapping("/{cep}/json/")
-	Address getAddressByZipCode(@PathVariable("cep") String cep);
+interface ViaCepService {
+    @GetMapping("/{cep}/json/")
+    fun getAddressByZipCode(@PathVariable("cep") cep: String): Address
 }
